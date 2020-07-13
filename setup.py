@@ -13,7 +13,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='genegeniebio-utils',
-    version='1.0',
+    version='1.01',
     author='Neil Swainston',
     author_email='neil.swainston@genegenie.bio',
     description='genegeniebio-utils',
