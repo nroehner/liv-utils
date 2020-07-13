@@ -189,7 +189,7 @@ class CodonOptimiser():
         return aa_to_codon_prob
 
 
-def get_codon_usage_organisms(expand=False):
+def get_codon_usage_organisms(expand=False, write=False):
     '''Gets name to taxonomy id dictionary of available codon usage tables.'''
     destination = os.path.dirname(os.path.realpath(__file__))
     filename = 'expand.txt' if expand else 'normal.txt'
@@ -218,7 +218,8 @@ def get_codon_usage_organisms(expand=False):
             codon_orgs = new_codon_orgs
 
         # Save:
-        _write_codon_usage_orgs_file(codon_orgs, filepath)
+        if write:
+            _write_codon_usage_orgs_file(codon_orgs, filepath)
 
         return codon_orgs
 

@@ -16,7 +16,7 @@ with open('requirements.txt') as fle:
 
 setuptools.setup(
     name='genegeniebio-utils',
-    version='1.01',
+    version='1.0',
     author='Neil Swainston',
     author_email='neil.swainston@genegenie.bio',
     description='genegeniebio-utils',
