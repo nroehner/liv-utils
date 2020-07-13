@@ -8,8 +8,11 @@ All rights reserved.
 # pylint: disable=exec-used
 import setuptools
 
-with open('README.md', 'r') as fh:
-    _LONG_DESCRIPTION = fh.read()
+with open('README.md', 'r') as fle:
+    _LONG_DESCRIPTION = fle.read()
+
+with open('requirements.txt') as fle:
+    _REQUIREMENTS = fle.read().splitlines()
 
 setuptools.setup(
     name='genegeniebio-utils',
@@ -26,4 +29,5 @@ setuptools.setup(
         'Operating System :: OS Independent',
     ],
     python_requires='>=3.7',
+    install_requires=_REQUIREMENTS
 )
