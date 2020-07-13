@@ -13,6 +13,7 @@ All rights reserved.
 import codecs
 import copy
 import json
+import re
 import tempfile
 import traceback
 from xml.etree.ElementTree import ParseError
@@ -20,17 +21,15 @@ from xml.etree.ElementTree import ParseError
 from genegeniebio.utils import dna_utils, net_utils, sbol_utils
 
 
-_DEFAULT_ID_PREFIX = 'SBC'
 _SESSION_KEY = 'X-ICE-Authentication-SessionId'
 
 
-def get_ice_client(url, username, psswrd,
-                   id_prefix=_DEFAULT_ID_PREFIX, group_names=None):
+def get_ice_client(url, username, psswrd, group_names=None):
     '''Get ICEClient.'''
     if group_names is None:
         group_names = []
 
-    return ICEClient(url, username, psswrd, id_prefix, group_names)
+    return ICEClient(url, username, psswrd, group_names)
 
 
 class ICEEntry():
@@ -53,17 +52,15 @@ class ICEEntry():
 
     def get_ice_number(self):
         '''Gets the ICE number.'''
-        return self.__metadata['id'] if 'id' in self.__metadata else None
+        return self.__metadata.get('id', None)
 
     def get_ice_id(self):
         '''Gets the ICE id.'''
-        ice_number = self.get_ice_number()
-        return get_ice_id(ice_number) if ice_number is not None else None
+        return self.__metadata.get('partId', None)
 
     def get_record_id(self):
         '''Gets the ICE record id.'''
-        return self.__metadata['recordId'] if 'recordId' in self.__metadata \
-            else None
+        return self.__metadata.get('recordId', None)
 
     def get_type(self):
         '''Gets the ICE type.'''
@@ -147,12 +144,10 @@ class ICEEntry():
 class ICEClient():
     '''Class representing an ICE client.'''
 
-    def __init__(self, url, username, psswrd, id_prefix=_DEFAULT_ID_PREFIX,
-                 group_names=None):
+    def __init__(self, url, username, psswrd, group_names=None):
         self.__url = url[:-1] if url[-1] == '/' else url
         self.__username = username
         self.__psswrd = psswrd
-        self.__id_prefix = id_prefix
 
         if group_names is None:
             group_names = []
@@ -167,6 +162,8 @@ class ICEClient():
                             for name, group_id
                             in self.get_groups().items()
                             if name in group_names]
+
+        self.__id_prefix, self.__id_len = self.__get_id_format()
 
     def reconnect(self):
         '''Reconnects to ICE server.'''
@@ -205,7 +202,7 @@ class ICEClient():
             response = self.__update_entry(ice_entry.get_ice_number(),
                                            self.__form_metadata(ice_entry))
 
-        metadata = self.__get_meta_data(self.__get_ice_id(response['id']))
+        metadata = self.__get_meta_data(self.get_ice_id(response['id']))
         ice_entry.set_values(metadata)
 
         if ice_entry.get_dna_updated():
@@ -222,7 +219,7 @@ class ICEClient():
 
                 ice_entry.unset_dna_updated()
 
-        metadata = self.__get_meta_data(self.__get_ice_id(response['id']))
+        metadata = self.__get_meta_data(self.get_ice_id(response['id']))
         ice_entry.set_values(metadata)
 
         for group_id in self.__group_ids:
@@ -262,9 +259,9 @@ class ICEClient():
 
     def add_link(self, parent_id, child_id):
         '''Adds a link between a parent and child.'''
-        url = self.__url + '/rest/parts/' + get_ice_number(parent_id) + \
+        url = self.__url + '/rest/parts/' + self.get_ice_number(parent_id) + \
             '/links'
-        data = {'id': get_ice_number(child_id)}
+        data = {'id': self.get_ice_number(child_id)}
         return _read_resp(net_utils.post(url,
                                          data=json.dumps(data),
                                          headers=self.__headers))
@@ -282,7 +279,7 @@ class ICEClient():
 
     def add_permission(self, ice_id, group_id, read=True):
         '''Adds user permissions to a given ICE entry.'''
-        url = self.__url + '/rest/parts/' + self.__get_ice_number(ice_id) + \
+        url = self.__url + '/rest/parts/' + self.get_ice_number(ice_id) + \
             '/permissions'
         data = {'type': 'READ_ENTRY' if read else 'WRITE_ENTRY',
                 'article': 'GROUP',
@@ -327,7 +324,7 @@ class ICEClient():
 
     def get_genbank(self, ice_id, out=None):
         '''Get Genbank file.'''
-        url = self.__url + '/rest/file/' + self.__get_ice_number(ice_id) + \
+        url = self.__url + '/rest/file/' + self.get_ice_number(ice_id) + \
             '/sequence/genbank'
         genbank = net_utils.get(url, self.__headers)
 
@@ -337,12 +334,39 @@ class ICEClient():
 
         return genbank
 
+    def get_ice_number(self, ice_identifier):
+        '''Maps ICE number to ICE id, i.e. from SBC000123 to 123,
+        or if a number is supplied, returns the number.'''
+        try:
+            ice_number = int(ice_identifier.replace(self.__id_prefix, ''))
+        except AttributeError:
+            # 'Ask forgiveness, not permission' and assume ice_identifier is
+            # the ice_number:
+            ice_number = ice_identifier
+
+        return str(ice_number)
+
+    def get_ice_id(self, ice_number):
+        '''Maps ICE id to ICE number, i.e. from 123 to SBC000123.'''
+        return self.__id_prefix + \
+            format(int(self.get_ice_number(ice_number)),
+                   '0' + str(self.__id_len))
+
     def __get_access_token(self, service, username, psswrd):
         '''Gets access token response.'''
         return _read_resp(net_utils.post(self.__url + '/rest' + service,
                                          json.dumps({'email': username,
                                                      'password': psswrd}),
                                          self.__headers))
+
+    def __get_id_format(self):
+        '''Get id format. NOTE: this will fail with an empty repository!'''
+        resp = self.search('term')
+        ice_id = resp['results'][0]['entryInfo']['partId']
+        digit_idx = re.search(r'\d', ice_id).start()
+        id_prefix = ice_id[:digit_idx]
+        id_len = len(ice_id) - digit_idx + 1
+        return id_prefix, id_len
 
     def __form_metadata(self, ice_entry):
         '''Forms metadata dictionary.'''
@@ -374,12 +398,12 @@ class ICEClient():
     def __get_meta_data(self, ice_id):
         '''Returns an ICE entry metadata.'''
         return _read_resp(net_utils.get(
-            self.__url + '/rest/parts/' + self.__get_ice_number(ice_id),
+            self.__url + '/rest/parts/' + self.get_ice_number(ice_id),
             self.__headers))
 
     def __get_dna(self, ice_id):
         '''Gets the sequence ICE entry.'''
-        url = self.__url + '/rest/file/' + self.__get_ice_number(ice_id) + \
+        url = self.__url + '/rest/file/' + self.get_ice_number(ice_id) + \
             '/sequence/sbol1?sid=' + self.__sid
         temp_file = tempfile.NamedTemporaryFile(delete=False)
 
@@ -397,7 +421,7 @@ class ICEClient():
 
     def __update_entry(self, ice_id, metadata):
         '''Updates an ICE entry in the database.'''
-        ice_number = self.__get_ice_number(ice_id)
+        ice_number = self.get_ice_number(ice_id)
         url = self.__url + '/rest/parts/' + str(ice_number)
 
         return _read_resp(net_utils.put(url, json.dumps(metadata),
@@ -408,15 +432,6 @@ class ICEClient():
         sbol_file = tempfile.NamedTemporaryFile(suffix='.xml')
         sbol_utils.write(dna, sbol_file.name)
         return self.__upload_seq_file(record_id, typ, sbol_file.name)
-
-    def __get_ice_number(self, ice_identifier):
-        '''Maps ICE number to ICE id, i.e. from SBC000123 to 123,
-        or if a number is supplied, returns the number.'''
-        return get_ice_number(ice_identifier, self.__id_prefix)
-
-    def __get_ice_id(self, ice_number):
-        '''Maps ICE id to ICE number, i.e. from 123 to SBC000123.'''
-        return get_ice_id(ice_number, self.__id_prefix)
 
 
 class DNAWriter():
@@ -478,24 +493,6 @@ class DNAWriter():
             self.__ice_client.add_link(entry_id, par_ice_entry)
 
         return entry_id, ice_entry.get_type()
-
-
-def get_ice_number(ice_identifier, id_prefix=_DEFAULT_ID_PREFIX):
-    '''Maps ICE number to ICE id, i.e. from SBC000123 to 123,
-    or if a number is supplied, returns the number.'''
-    try:
-        ice_number = int(ice_identifier.replace(id_prefix, ''))
-    except AttributeError:
-        # "Ask forgiveness, not permission" and assume ice_identifier is
-        # the ice_number:
-        ice_number = ice_identifier
-
-    return str(ice_number)
-
-
-def get_ice_id(ice_number, id_prefix=_DEFAULT_ID_PREFIX):
-    '''Maps ICE id to ICE number, i.e. from 123 to SBC000123.'''
-    return id_prefix + format(int(get_ice_number(ice_number)), '06')
 
 
 def _read_resp(response):

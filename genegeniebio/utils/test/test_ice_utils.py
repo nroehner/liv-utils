@@ -300,16 +300,12 @@ class TestICEClient(unittest.TestCase):
         resp = self.__ice_client.get_genbank(6592)
         self.assertTrue(resp)
 
-
-class Test(unittest.TestCase):
-    '''Test class for ice_utils.'''
-
     def test_get_ice_number(self):
         '''Tests get_ice_number method.'''
-        self.assertEqual(ice_utils.get_ice_number('TEST00063', 'TEST'), '63')
-        self.assertEqual(ice_utils.get_ice_number('TEST63', 'TEST'), '63')
-        self.assertEqual(ice_utils.get_ice_number('63', 'TEST'), '63')
-        self.assertEqual(ice_utils.get_ice_number(63, 'TEST'), '63')
+        self.assertEqual(self.__ice_client.get_ice_number('TEST00063'), '63')
+        self.assertEqual(self.__ice_client.get_ice_number('TEST63'), '63')
+        self.assertEqual(self.__ice_client.get_ice_number('63'), '63')
+        self.assertEqual(self.__ice_client.get_ice_number(63), '63')
 
 
 def _read(filename):
