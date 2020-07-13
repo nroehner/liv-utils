@@ -16,6 +16,7 @@ import urllib.request
 
 from genegeniebio.utils import ncbi_tax_utils, seq_utils
 
+
 AA_CODES = {'Ala': 'A',
             'Cys': 'C',
             'Asp': 'D',

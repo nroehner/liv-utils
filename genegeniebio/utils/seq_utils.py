@@ -8,7 +8,6 @@ All rights reserved.
 # pylint: disable=too-many-arguments
 from collections import defaultdict
 import itertools
-
 import random
 import re
 from subprocess import call

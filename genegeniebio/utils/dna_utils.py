@@ -17,6 +17,7 @@ import uuid
 from Bio.Restriction import RestrictionBatch
 from Bio.Seq import Seq
 
+
 SO_GENE = 'http://identifiers.org/so/SO:0000704'
 SO_PROM = 'http://identifiers.org/so/SO:0000167'
 SO_RBS = 'http://identifiers.org/so/SO:0000139'

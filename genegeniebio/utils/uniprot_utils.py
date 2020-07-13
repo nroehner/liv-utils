@@ -9,9 +9,9 @@ All rights reserved.
 # pylint: disable=too-many-arguments
 import re
 import urllib
-import requests
 
 from genegeniebio.utils import thread_utils
+import requests
 
 
 def get_uniprot_values(uniprot_ids, fields, batch_size=128, verbose=False,

@@ -8,6 +8,7 @@ All rights reserved.
 # pylint: disable=exec-used
 import setuptools
 
+
 with open('README.md', 'r') as fle:
     _LONG_DESCRIPTION = fle.read()
 

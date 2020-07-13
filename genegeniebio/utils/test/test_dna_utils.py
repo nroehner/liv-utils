@@ -11,6 +11,7 @@ import unittest
 
 from Bio.Restriction import HgaI, MlyI
 from genegeniebio.utils import dna_utils, sbol_utils
+
 from genegeniebio.utils.test import test_sbol_utils
 
 
