@@ -1,5 +1,5 @@
 '''
-CodonGenie (c) GeneGenie Bioinformatics Ltd. 2020
+PartsGenie (c) GeneGenie Bioinformatics Ltd. 2020
 
 All rights reserved.
 
