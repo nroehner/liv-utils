@@ -14,7 +14,7 @@ from sbol import ComponentDefinition, Document, Range, Sequence, \
     SBOL_ORIENTATION_INLINE, \
     SBOL_ORIENTATION_REVERSE_COMPLEMENT
 
-from genegeniebio.utils.dna_utils import DNA
+from genegeniebio.utils.dna_utils import DNA, get_disp_id
 
 
 def read(filename):
@@ -38,12 +38,11 @@ def write(dna, filename=None):
     '''Writes a Dna object to SBOL v1.'''
     doc = Document()
 
-    comp_def = ComponentDefinition()
+    comp_def = ComponentDefinition(dna['disp_id'])
     doc.addComponentDefinition(comp_def)
-
     _write_dna_comp(comp_def, dna)
 
-    seq = Sequence('sequence', dna['seq'], SBOL_ENCODING_IUPAC)
+    seq = Sequence(get_disp_id(), dna['seq'], SBOL_ENCODING_IUPAC)
     doc.addSequence(seq)
 
     for feature in dna['features']:
@@ -51,7 +50,7 @@ def write(dna, filename=None):
         comp_def.sequenceAnnotations.add(annot)
         _write_dna_comp(annot, feature)
 
-        rnge = Range()
+        rnge = Range(get_disp_id())
         annot.locations.add(rnge)
         rnge.start = feature['start']
         rnge.end = feature['end']
