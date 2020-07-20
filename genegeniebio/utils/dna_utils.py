@@ -47,7 +47,8 @@ class DNA(dict):
         dict.__init__(self)
 
         self.update({'disp_id': disp_id
-                     if disp_id is not None else str(uuid.uuid4()),
+                     if disp_id is not None
+                     else _get_disp_id(),
                      'seq': re.sub(r'[\s]', '', seq.upper()),
                      'name': name,
                      'desc': desc,
@@ -94,7 +95,7 @@ def get_dna(dct):
 def concat(dnas):
     '''Concatenates a list of DNA objects into a single DNA object.'''
     concat_dna = dnas[0].copy()
-    concat_dna['disp_id'] = str(uuid.uuid4())
+    concat_dna['disp_id'] = _get_disp_id()
 
     for dna in dnas[1:]:
         concat_dna = add(concat_dna, dna)
@@ -118,7 +119,7 @@ def apply_restricts(dna, restricts, circular=False):
 def add(dna1, dna2):
     '''Adds two DNA objects together.'''
     # Add names, etc.
-    dna1.disp_id = str(uuid.uuid4())
+    dna1.disp_id = _get_disp_id()
     dna1['name'] = _concat([dna1['name'], dna2['name']])
     dna1['desc'] = _concat([dna1['desc'], dna2['desc']])
 
@@ -221,7 +222,7 @@ def _get_concat_dna(parent_dna, seq, start, end):
         disp_id = parent_dna['disp_id']
         frag_str = ''
     else:
-        disp_id = str(uuid.uuid4())
+        disp_id = _get_disp_id()
         frag_str = ' [' + str(start) + ':' + str(end) + ']'
 
     dna = DNA(disp_id=disp_id,
@@ -237,3 +238,8 @@ def _get_concat_dna(parent_dna, seq, start, end):
             dna['features'].append(copy_feature)
 
     return dna
+
+
+def _get_disp_id():
+    '''Get disp_id.'''
+    return '_' + str(uuid.uuid4()).replace('-', '_')

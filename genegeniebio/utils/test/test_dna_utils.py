@@ -28,13 +28,13 @@ class Test(unittest.TestCase):
     def test_concat(self):
         '''Tests concat method.'''
         directory = os.path.dirname(os.path.realpath(__file__))
+        dna1 = sbol_utils.read(os.path.join(directory, 'sbol.xml'))
         dna2 = sbol_utils.read(os.path.join(directory, 'sbol2.xml'))
-        dna3 = sbol_utils.read(os.path.join(directory, 'sbol3.xml'))
-        concat_dna = test_sbol_utils.round_trip(dna_utils.concat([dna2, dna3]))
+        concat_dna = test_sbol_utils.round_trip(dna_utils.concat([dna1, dna2]))
 
         self.assertFalse(concat_dna['features'][0]['forward'])
 
-        self.assertEqual(len(dna2['features']) + len(dna3['features']),
+        self.assertEqual(len(dna1['features']) + len(dna2['features']),
                          len(concat_dna['features']))
 
     def test_json(self):
