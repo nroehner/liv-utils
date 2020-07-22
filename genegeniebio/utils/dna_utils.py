@@ -28,10 +28,6 @@ SO_PLASMID = 'http://identifiers.org/so/SO:0000637'
 SO_DESIGNED = 'http://identifiers.org/so/SO:0000546'
 SO_RANDOM = 'http://identifiers.org/so/SO:0000449'
 
-_RDF_NS = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-_NS = {'ns': 'http://sbols.org/v1#',
-       'rdf': _RDF_NS}
-
 
 def get_disp_id():
     '''Get disp_id.'''

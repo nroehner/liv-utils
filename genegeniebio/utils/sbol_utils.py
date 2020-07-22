@@ -14,7 +14,10 @@ from sbol import ComponentDefinition, Document, Range, Sequence, \
     SBOL_ORIENTATION_INLINE, \
     SBOL_ORIENTATION_REVERSE_COMPLEMENT
 
-from genegeniebio.utils.dna_utils import DNA, get_disp_id
+from genegeniebio.utils.dna_utils import DNA, SO_PART, get_disp_id
+
+
+_DNA_REGION = 'http://www.biopax.org/release/biopax-level3.owl#DnaRegion'
 
 
 def read(filename):
@@ -67,11 +70,7 @@ def _read_dna_comp(node):
     disp_id = node.displayId
     name = node.name
     desc = node.description
-
-    try:
-        typ = node.types[0] if node.types else None
-    except AttributeError:
-        typ = node.roles[0] if node.roles else None
+    typ = node.roles[0] if node.roles else None
 
     if not re.match('^[\\w-]+$', disp_id):
         disp_id = str(uuid.uuid4())
@@ -123,8 +122,9 @@ def _write_dna_comp(node, dna):
     node.name = dna['name']
     node.description = dna['desc']
 
-    if dna['typ']:
-        try:
-            node.types.append(dna['typ'])
-        except AttributeError:
-            node.roles.append(dna['typ'])
+    try:
+        node.types = [_DNA_REGION]
+    except AttributeError:
+        pass
+
+    node.roles = [dna['typ'] if dna['typ'] else SO_PART]
