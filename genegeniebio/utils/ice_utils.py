@@ -18,7 +18,7 @@ import tempfile
 import traceback
 from xml.etree.ElementTree import ParseError
 
-from genegeniebio.utils import dna_utils, net_utils, sbol_utils
+from genegeniebio.utils import dna_utils, genbank_utils, net_utils, sbol_utils
 
 
 _SESSION_KEY = 'X-ICE-Authentication-SessionId'
@@ -428,9 +428,9 @@ class ICEClient():
                                         self.__headers))
 
     def __upload_dna(self, record_id, typ, dna):
-        '''Uploads an SBOLDocument to ICE database.'''
-        sbol_file = tempfile.NamedTemporaryFile(suffix='.xml')
-        sbol_utils.write(dna, sbol_file.name)
+        '''Uploads an Genbank to ICE database.'''
+        sbol_file = tempfile.NamedTemporaryFile(suffix='.gb')
+        genbank_utils.write(dna, sbol_file.name)
         return self.__upload_seq_file(record_id, typ, sbol_file.name)
 
 

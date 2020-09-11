@@ -38,7 +38,7 @@ def read(filename):
 
 
 def write(dna, filename=None):
-    '''Writes a Dna object to SBOL v1.'''
+    '''Writes a Dna object to SBOL v2.'''
     doc = Document()
 
     comp_def = ComponentDefinition(dna['disp_id'])
