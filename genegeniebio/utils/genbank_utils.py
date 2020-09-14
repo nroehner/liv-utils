@@ -7,7 +7,6 @@ All rights reserved.
 '''
 # pylint: disable=too-many-arguments
 from Bio import Seq, SeqIO, SeqFeature
-from Bio.Alphabet import IUPAC
 
 from genegeniebio.utils.dna_utils import SO_RBS, SO_CDS, SO_PROM
 
@@ -36,9 +35,10 @@ class GenbankBuilder():
     '''Class to build a Genbank record.'''
 
     def __init__(self, sequence, locus, accession, desc='', circular=True):
-        seq = Seq.Seq(sequence, alphabet=IUPAC.ambiguous_dna)
+        seq = Seq.Seq(sequence)
         self.__record = SeqIO.SeqRecord(id=accession, seq=seq, name=locus,
-                                        description=desc)
+                                        description=desc,
+                                        annotations={'molecule_type': 'DNA'})
 
         self.__record.annotations['topology'] = 'circular' if circular \
             else 'linear'
