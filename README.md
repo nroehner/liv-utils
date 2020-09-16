@@ -1,2 +1,2 @@
-# genegeniebio-utils
-genegeniebio-utils
+# genegenie-utils
+genegenie-utils
