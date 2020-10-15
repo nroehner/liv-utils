@@ -1,5 +1,5 @@
 '''
-genegeniebio-utils (c) GeneGenie Bioinformatics Ltd. 2020
+liv-utils (c) University of Liverpool. 2020
 
 All rights reserved.
 
@@ -11,7 +11,7 @@ import math
 import random
 import traceback
 
-from genegeniebio.utils.job_utils import JobThread
+from liv_utils.job_utils import JobThread
 
 
 class SimulatedAnnealer(JobThread):

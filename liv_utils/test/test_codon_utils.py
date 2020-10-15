@@ -1,5 +1,5 @@
 '''
-PartsGenie (c) GeneGenie Bioinformatics Ltd. 2020
+liv-utils (c) University of Liverpool. 2020
 
 All rights reserved.
 
@@ -8,7 +8,7 @@ All rights reserved.
 import random
 import unittest
 
-from genegeniebio.utils import codon_utils, seq_utils
+from liv_utils import codon_utils, seq_utils
 
 
 class CodonOptimiserTest(unittest.TestCase):

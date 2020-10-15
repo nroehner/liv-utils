@@ -1,5 +1,5 @@
 '''
-genegeniebio-utils (c) GeneGenie Bioinformatics Ltd. 2020
+liv-utils (c) University of Liverpool. 2020
 
 All rights reserved.
 
@@ -11,8 +11,8 @@ import unittest
 
 from Bio.Restriction import HgaI, MlyI
 
-from genegeniebio.utils import dna_utils, sbol_utils
-from genegeniebio.utils.test import test_sbol_utils
+from liv_utils import dna_utils, sbol_utils
+from liv_utils.test import test_sbol_utils
 
 
 class Test(unittest.TestCase):

@@ -1,5 +1,5 @@
 '''
-genegeniebio-utils (c) GeneGenie Bioinformatics Ltd. 2020
+liv-utils (c) University of Liverpool. 2020
 
 All rights reserved.
 
@@ -7,7 +7,7 @@ All rights reserved.
 '''
 import unittest
 
-from genegeniebio.utils import uniprot_utils
+from liv_utils import uniprot_utils
 
 
 class Test(unittest.TestCase):

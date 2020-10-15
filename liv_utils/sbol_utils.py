@@ -1,5 +1,5 @@
 '''
-genegeniebio-utils (c) GeneGenie Bioinformatics Ltd. 2020
+liv-utils (c) University of Liverpool. 2020
 
 All rights reserved.
 
@@ -14,7 +14,7 @@ from sbol import ComponentDefinition, Document, Range, Sequence, \
     SBOL_ORIENTATION_INLINE, \
     SBOL_ORIENTATION_REVERSE_COMPLEMENT
 
-from genegeniebio.utils.dna_utils import DNA, SO_PART, get_disp_id
+from liv_utils.dna_utils import DNA, SO_PART, get_disp_id
 
 
 _DNA_REGION = 'http://www.biopax.org/release/biopax-level3.owl#DnaRegion'

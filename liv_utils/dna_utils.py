@@ -1,11 +1,13 @@
 '''
-genegeniebio-utils (c) GeneGenie Bioinformatics Ltd. 2020
+liv-utils (c) University of Liverpool. 2020
 
 All rights reserved.
 
 @author:  neilswainston
 '''
+# pylint: disable=bad-continuation
 # pylint: disable=no-member
+# pylint: disable=no-name-in-module
 # pylint: disable=too-many-arguments
 # pylint: disable=too-many-locals
 import copy
@@ -47,24 +49,23 @@ class DNA(dict):
 
         dict.__init__(self)
 
-        self.update({'disp_id': disp_id
-                     if disp_id is not None
-                     else get_disp_id(),
-                     'seq': re.sub(r'[\s]', '', seq.upper()),
-                     'name': name,
-                     'desc': desc,
-                     'typ': typ,
-                     'start': start,
-                     'end': end if not math.isnan(end)
-                     else start + len(re.sub(r'[\s]', '', seq.upper())) - 1,
-                     'forward': forward,
-                     'features': [] if features is None else features,
-                     'children': [] if children is None else children,
-                     'options': [] if options is None else options,
-                     'links': [] if links is None else links,
-                     'parameters': {} if parameters is None else parameters,
-                     'temp_params': {} if temp_params is None else temp_params,
-                     })
+        self.update({
+            'disp_id': disp_id if disp_id is not None else get_disp_id(),
+            'seq': re.sub(r'[\s]', '', seq.upper()),
+            'name': name,
+            'desc': desc,
+            'typ': typ,
+            'start': start,
+            'end': end if not math.isnan(end)
+            else start + len(re.sub(r'[\s]', '', seq.upper())) - 1,
+            'forward': forward,
+            'features': [] if features is None else features,
+            'children': [] if children is None else children,
+            'options': [] if options is None else options,
+            'links': [] if links is None else links,
+            'parameters': {} if parameters is None else parameters,
+            'temp_params': {} if temp_params is None else temp_params,
+        })
 
     def set_seq(self, seq):
         '''Sets sequence.'''

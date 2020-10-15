@@ -1,5 +1,5 @@
 '''
-genegeniebio-utils (c) GeneGenie Bioinformatics Ltd. 2020
+liv-utils (c) University of Liverpool. 2020
 
 All rights reserved.
 
@@ -18,7 +18,7 @@ import tempfile
 import traceback
 from xml.etree.ElementTree import ParseError
 
-from genegeniebio.utils import dna_utils, genbank_utils, net_utils, sbol_utils
+from liv_utils import dna_utils, genbank_utils, net_utils, sbol_utils
 
 
 _SESSION_KEY = 'X-ICE-Authentication-SessionId'

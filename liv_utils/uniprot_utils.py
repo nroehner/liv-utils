@@ -1,5 +1,5 @@
 '''
-genegeniebio-utils (c) GeneGenie Bioinformatics Ltd. 2020
+liv-utils (c) University of Liverpool. 2020
 
 All rights reserved.
 
@@ -12,7 +12,7 @@ import urllib
 
 import requests
 
-from genegeniebio.utils import thread_utils
+from liv_utils import thread_utils
 
 
 def get_uniprot_values(uniprot_ids, fields, batch_size=128, verbose=False,

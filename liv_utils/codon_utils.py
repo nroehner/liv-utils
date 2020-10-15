@@ -1,5 +1,5 @@
 '''
-PartsGenie (c) GeneGenie Bioinformatics Ltd. 2020
+liv-utils (c) University of Liverpool. 2020
 
 All rights reserved.
 
@@ -14,7 +14,7 @@ import re
 import tempfile
 import urllib.request
 
-from genegeniebio.utils import ncbi_tax_utils, seq_utils
+from liv_utils import ncbi_tax_utils, seq_utils
 
 
 AA_CODES = {'Ala': 'A',

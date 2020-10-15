@@ -1,5 +1,5 @@
 '''
-genegeniebio-utils (c) GeneGenie Bioinformatics Ltd. 2020
+liv-utils (c) University of Liverpool. 2020
 
 All rights reserved.
 
@@ -8,7 +8,7 @@ All rights reserved.
 # pylint: disable=too-many-arguments
 from Bio import Seq, SeqIO, SeqFeature
 
-from genegeniebio.utils.dna_utils import SO_RBS, SO_CDS, SO_PROM
+from liv_utils.dna_utils import SO_RBS, SO_CDS, SO_PROM
 
 
 _TYP_MAP = {

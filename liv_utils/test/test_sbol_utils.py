@@ -1,5 +1,5 @@
 '''
-genegeniebio-utils (c) GeneGenie Bioinformatics Ltd. 2020
+liv-utils (c) University of Liverpool. 2020
 
 All rights reserved.
 
@@ -9,7 +9,7 @@ import os
 import tempfile
 import unittest
 
-from genegeniebio.utils import sbol_utils
+from liv_utils import sbol_utils
 
 
 class Test(unittest.TestCase):
