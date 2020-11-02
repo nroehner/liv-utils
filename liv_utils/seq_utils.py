@@ -306,6 +306,51 @@ def pcr(seq, forward_primer, reverse_primer):
     return seq, for_primer_pos
 
 
+def translate(nucl_seq):
+    '''Translate all 6 reading frames, ordering results by cds length.'''
+    answer = []
+    nucl_seq = Seq.Seq(str(nucl_seq))
+    seq_len = len(nucl_seq)
+
+    for strand, strand_seq in [(+1, nucl_seq),
+                               (-1, nucl_seq.reverse_complement())]:
+        for frame in range(3):
+            trans = strand_seq[frame:].translate()
+            trans_len = len(trans)
+            aa_start = 0
+            aa_end = 0
+
+            while aa_start < trans_len:
+                aa_start = trans.find('M', aa_start)
+
+                if aa_start == -1:
+                    break
+
+                aa_end = trans.find('*', aa_start)
+
+                if aa_end == -1:
+                    aa_end = trans_len
+                else:
+                    aa_end += 1
+
+                if strand == 1:
+                    start = frame + aa_start * 3
+                    end = min(seq_len, frame + aa_end * 3)
+                else:
+                    start = seq_len - frame - aa_end * 3
+                    end = seq_len - frame - aa_start * 3
+
+                answer.append({'frame': strand * (frame + 1),
+                               'start': start,
+                               'end': end,
+                               'nucl_seq': str(nucl_seq[start:end]).upper(),
+                               'aa_seq': str(trans[aa_start:aa_end])})
+
+                aa_start = aa_end + 1
+
+    return sorted(answer, key=lambda x: len(x['aa_seq']), reverse=True)
+
+
 def _get_random_dna(length):
     '''Returns a random sequence of DNA of the supplied length.'''
     return ''.join(random.choice(['A', 'C', 'G', 'T']) for _ in range(length))
