@@ -15,10 +15,16 @@ from liv_utils import sbol_utils
 class Test(unittest.TestCase):
     '''Test class for dna_utils.'''
 
+    directory = os.path.join(
+        os.path.dirname(
+            os.path.realpath(__file__)
+        ),
+        'data'
+    )
+
     def test(self):
         '''Tests round trip equality.'''
-        directory = os.path.dirname(os.path.realpath(__file__))
-        dna1 = sbol_utils.read(os.path.join(directory, 'sbol.xml'))
+        dna1 = sbol_utils.read(os.path.join(self.directory, 'sbol.xml'))
         dna2 = round_trip(dna1)
         self.assertEqual(dna1, dna2)
 
