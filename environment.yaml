@@ -1,0 +1,8 @@
+name: liv-utils
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - biopython
+  - pysbol2
+  - blast
