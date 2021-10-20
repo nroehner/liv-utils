@@ -192,7 +192,10 @@ class CodonOptimiser():
 
 def get_codon_usage_organisms(expand=False, write=False):
     '''Gets name to taxonomy id dictionary of available codon usage tables.'''
-    destination = os.path.dirname(os.path.realpath(__file__))
+    destination = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        'data'
+    )
     filename = 'expand.txt' if expand else 'normal.txt'
     filepath = os.path.join(destination, filename)
 
