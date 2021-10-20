@@ -194,7 +194,8 @@ def get_rand_seq_by_melt_temp(target_melt_temp,
     '''Returns a random close to desired melting temperature.'''
     seq = random.choice(NUCLEOTIDES)
 
-    while True:
+    countout = 0
+    while countout < 10000:
         seq += random.choice(NUCLEOTIDES)
 
         if is_invalid(seq, max_repeat_nuc, restr_enzyms):
@@ -207,6 +208,8 @@ def get_rand_seq_by_melt_temp(target_melt_temp,
 
         if delta_tm / target_melt_temp < tol:
             return seq, melt_temp
+
+        countout += 1
 
     raise ValueError('Unable to get sequence of required melting temperature')
 
