@@ -21,18 +21,21 @@ build-recipe:
 	cat $(recipe)/_meta3.yaml >> $(recipe)/$(meta)
 	echo "    - `$(MAKE_CMD) -f test.mk test-cmd`" >> $(recipe)/$(meta)
 	cat $(recipe)/_meta4.yaml >> $(recipe)/$(meta)
-	echo > $(recipe)/conda_channels.txt
+	echo > $(recipe)/_conda_channels.txt
 	for pack in $(PACKAGES); do \
 		echo $$pack \
 			| sed "s/^\(.*\)::\(.*\)$$/\2 \1/" \
 			| awk '{print $$2}' \
-		>> $(recipe)/conda_channels.txt; \
+		>> $(recipe)/_conda_channels.txt; \
 	done
 	awk '/channels/,/dependencies/{if(/dependencies|channels/) next; print}' ../../environment.yaml \
 		| awk '{print $$2}' \
-	>> $(recipe)/conda_channels.txt
-	sed -i '' 's/^ *//; s/ *$$//; /^$$/d' $(recipe)/conda_channels.txt
-	sed -i '' -e '/^$$/d' $(recipe)/conda_channels.txt
+	>> $(recipe)/_conda_channels.txt
+	cat $(recipe)/_conda_channels.txt \
+		| tr -d " \t\r" \
+		| awk '!/^$$/' \
+	> $(recipe)/conda_channels.txt
+	rm $(recipe)/_conda_channels.txt
 
 # HELP
 # This will output the help for each task
@@ -109,7 +112,12 @@ endif
 ### build only
 conda-build-only: check-environment-build build-recipe
 	@$(ECHO) "Building conda package... "
-	@conda run --name ${PACKAGE}_build conda build --no-test $(CONDA_BUILD_ARGS) $(VARIANTS) --output-folder ${CONDA_BLD_PATH} $(recipe) > /dev/null \
+	conda run --name ${PACKAGE}_build \
+		conda build \
+			--no-test $(CONDA_BUILD_ARGS) $(VARIANTS) \
+			--output-folder ${CONDA_BLD_PATH} \
+			$(recipe) \
+	> /dev/null \
 	&& echo OK
 
 conda-test-only: check-environment-build build-recipe conda-add-channels
