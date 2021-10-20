@@ -33,7 +33,7 @@ check: ## Test code with 'pytest', this is the fastest way to test the code
 	   @$(MAKE_CMD) -f test.mk check
 
 test: ## Test code with 'pytest', this is the fastest way to test the code
-	   @$(MAKE_CMD) -f test.mk test args="$(args)"
+	   $(MAKE_CMD) -f test.mk test args="$(args)"
 
 %-buildenv: ## Test conda package
 ifneq ($(strip $(env)),)

@@ -18,7 +18,7 @@ ECHO = echo ">>>"
 PACKAGE = $(shell python ../../setup.py --name)
 
 ifeq ($(args),)
-	test_src := tests
+	test_src := ../tests
 else
 	test_src = $(args)
 endif
@@ -56,7 +56,7 @@ flake: ## Run flake over code and tests
 # TEST
 test: ## Test code with 'pytest'
 	@export PYTHONPATH=$$PWD/../.. ; \
-	cd ../.. ; \
+	cd .. ; \
 	$(test_cmd) -p no:cacheprovider $(test_src) ; \
 	res_test=$$? ; \
 	if [ $$res_test -eq 0 ] || [ $$res_test -eq 5 ] ; then \
