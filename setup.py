@@ -11,7 +11,7 @@ from os import path as os_path
 
 ## INFOS ##
 package     = 'liv_utils'
-descr       = 'liv-utils'
+descr       = 'Liverpool University Basic Tools'
 url         = 'https://github.com/neilswainston/liv-utils'
 authors     = 'Neil Swainston'
 corr_author = 'neil.swainston@liverpool.ac.uk'

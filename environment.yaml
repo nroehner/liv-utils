@@ -2,6 +2,9 @@ name: liv-utils
 channels:
   - conda-forge
 dependencies:
+  - python=3.7
   - biopython
-  - pysbol2
   - bioconda::blast
+  - pip
+  - pip:
+    - pySBOL
