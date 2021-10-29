@@ -16,7 +16,6 @@ from sbol import ComponentDefinition, Document, Range, Sequence, \
 
 from liv_utils.dna_utils import DNA, SO_PART, get_disp_id
 
-
 _DNA_REGION = 'http://www.biopax.org/release/biopax-level3.owl#DnaRegion'
 
 
