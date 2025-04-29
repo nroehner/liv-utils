@@ -61,7 +61,7 @@ def _get_uniprot_batch(uniprot_ids, i, batch_size, fields, values, verbose):
     batch = uniprot_ids[i:min(i + batch_size, len(uniprot_ids))]
     query = '+OR+'.join(['accession:' + uniprot_id for uniprot_id in batch])
     url = 'https://rest.uniprot.org/uniprotkb/search?query=' + query + \
-        '&format=tab&columns=accession,' + ','.join([urllib.parse.quote(field)
+        '&format=tsv&columns=accession,' + ','.join([urllib.parse.quote(field)
                                                      for field in fields])
 
     _parse_uniprot_data(url, values)
