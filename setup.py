@@ -27,6 +27,9 @@ with open(
 ) as f:
     long_description = f.read()
 
+with open('requirements.txt') as req_handle:
+    requirements = req_handle.read().splitlines()
+
 def get_version():
     with open(
         os_path.join(
@@ -46,6 +49,7 @@ def get_version():
 setup(
     name                          = package,
     version                       = get_version(),
+    install_requires              = requirements,
     author                        = authors,
     author_email                  = corr_author,
     description                   = descr,
